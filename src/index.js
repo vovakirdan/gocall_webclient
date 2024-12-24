@@ -12,18 +12,13 @@ const stopBtn = document.getElementById("btn-stop");
 const localVideo = document.getElementById("localVideo");
 const remoteContainer = document.getElementById("remoteContainer");
 
-// Инициализируем клиент и присоединяемся к комнате
 async function initClient() {
-  // Создаём gRPC-Web сигнал
   const signal = new IonSFUJSONRPCSignal(sfuUrl);
-
-  // Создаём основного клиента
   client = new Client(signal);
 
-  // Обработчик на входящие треки
+  // При поступлении новых треков
   client.ontrack = (track, stream) => {
     console.log("[INFO] Got remote track:", track.kind);
-
     const remoteVideo = document.createElement("video");
     remoteVideo.autoplay = true;
     remoteVideo.playsInline = true;
@@ -36,15 +31,13 @@ async function initClient() {
     };
   };
 
-  // Ждём, пока сигнальный канал откроется (signal.open())
-  await signal.open();
-
-  // Присоединяемся к комнате
-  await client.join(roomId);
-  console.log("[INFO] Joined room:", roomId);
+  // JSON-RPC сигнал сам вызовет этот коллбек, когда WebSocket откроется
+  signal.onopen = async () => {
+    await client.join(roomId);
+    console.log("[INFO] Joined room:", roomId);
+  };
 }
 
-// Старт локальной камеры
 async function startVideo() {
   if (!client) {
     await initClient();
@@ -61,7 +54,8 @@ async function startVideo() {
     });
     localVideo.srcObject = localStream;
 
-    // Публикуем поток
+    // Ждём, пока SFU не будет joined — иначе publish упадёт
+    // Можно проверить какое-то состояние, или подождать несколько сотен мс.
     await client.publish(localStream);
     console.log("[INFO] Local stream published");
   } catch (err) {
@@ -69,7 +63,6 @@ async function startVideo() {
   }
 }
 
-// Остановка локального видео
 function stopVideo() {
   if (!localStream) {
     console.warn("[WARN] No local stream to stop");
@@ -81,6 +74,5 @@ function stopVideo() {
   console.log("[INFO] Local stream stopped");
 }
 
-// Вешаем обработчики на кнопки
 startBtn.addEventListener("click", startVideo);
 stopBtn.addEventListener("click", stopVideo);
