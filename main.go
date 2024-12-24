@@ -16,7 +16,7 @@ func init() {
 func main() {
     // Параметры запуска
     ip := flag.String("ip", "127.0.0.1", "IP to bind")
-    port := flag.String("port", "8443", "Port to bind")
+    port := flag.String("port", "8080", "Port to bind")
     flag.Parse()
 
     addr := fmt.Sprintf("%s:%s", *ip, *port)
