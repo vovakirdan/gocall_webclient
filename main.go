@@ -22,8 +22,8 @@ func main() {
     addr := fmt.Sprintf("%s:%s", *ip, *port)
 
     // В папке "certificates" должны лежать server.crt и server.key
-    certFile := fmt.Sprintf("%s.pem", *ip)
-	keyFile := fmt.Sprintf("%s-key.pem", *ip)
+    certFile := fmt.Sprintf("./certificates/%s.pem", *ip)
+	keyFile := fmt.Sprintf("./certificates/%s-key.pem", *ip)
 
     // Отдаём всю папку "dist" как статику
     fs := http.FileServer(http.Dir("./dist"))

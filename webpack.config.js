@@ -1,25 +1,18 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './src/index.js',          // Точка входа (наш основной JS)
+  entry: './src/index.js',            // Точка входа
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'           // Выходной бандл
+    filename: 'bundle.js'
   },
-  mode: 'production',               // Или 'development'
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',   // Если хотите использовать Babel
-          options: {
-            // Настройки Babel (опционально)
-            presets: ['@babel/preset-env']
-          }
-        }
-      }
-    ]
-  }
+  mode: 'production',                 // или 'development'
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',   // наш HTML-шаблон
+      // Если хотите просто сгенерировать без шаблона:
+      // title: "Ion-SFU gRPC Web Client"
+    })
+  ]
 };

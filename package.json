@@ -1,19 +1,17 @@
 {
   "name": "gocall_webclient",
   "version": "1.0.0",
-  "description": "Ion-SFU client example with webpack",
+  "description": "Ion-SFU client example with webpack (gRPC version)",
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "ion-sdk-js": "^1.8.2"
   },
   "devDependencies": {
     "webpack": "5.97.1",
-    "webpack-cli": "^6.0.1"
+    "webpack-cli": "^6.0.1",
+    "html-webpack-plugin": "^5.5.3"
   }
 }
